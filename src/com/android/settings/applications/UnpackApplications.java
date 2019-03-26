@@ -1196,9 +1196,15 @@ public class UnpackApplications extends InstrumentedFragment
         }
 
         private String getEnforceType(String directory) {
+            ZipInputStream zipInputStream = null;
+            try {
+                zipInputStream = new ZipInputStream(new BufferedInputStream(new FileInputStream(directory)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             while (true) {
                 try {
-                    ZipInputStream zipInputStream = new ZipInputStream(new BufferedInputStream(new FileInputStream(directory)));
                     ZipEntry nextEntry = zipInputStream.getNextEntry();
                     if (nextEntry != null) {
                         String fileName = nextEntry.getName();
@@ -1266,7 +1272,7 @@ public class UnpackApplications extends InstrumentedFragment
 
                 default:
                     //holder.updateSizeText(mUnpackApplications.mInvalidSizeStr, mWhichSize);
-                    holder.summary.setText("你好");
+                    holder.summary.setText("加固类型: " + getEnforceType(holder.entry.info.publicSourceDir));
                     break;
             }
         }
