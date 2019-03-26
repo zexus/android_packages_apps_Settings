@@ -66,6 +66,7 @@ import com.android.settings.applications.AdvancedAppSettings;
 import com.android.settings.applications.DrawOverlayDetails;
 import com.android.settings.applications.InstalledAppDetails;
 import com.android.settings.applications.ManageApplications;
+import com.android.settings.applications.UnpackApplications;
 import com.android.settings.applications.ManageAssist;
 import com.android.settings.applications.ManageDomainUrls;
 import com.android.settings.applications.NotificationApps;
@@ -271,6 +272,8 @@ public class SettingsActivity extends SettingsDrawerActivity
             Settings.PrintSettingsActivity.class.getName(),
             Settings.PaymentSettingsActivity.class.getName(),
             Settings.TimerSwitchSettingsActivity.class.getName(),
+            //crack_section
+            Settings.UnpackApplicationsActivity.class.getName(),
     };
 
     private static final String[] ENTRY_FRAGMENTS = {
@@ -294,6 +297,7 @@ public class SettingsActivity extends SettingsDrawerActivity
             DisplaySettings.class.getName(),
             DeviceInfoSettings.class.getName(),
             ManageApplications.class.getName(),
+            UnpackApplications.class.getName(),
             NotificationApps.class.getName(),
             ManageAssist.class.getName(),
             ProcessStatsUi.class.getName(),

@@ -36,6 +36,8 @@
     <string name="header_category_personal" msgid="3310195187905720823">"个人"</string>
     <string name="header_category_access" msgid="7580499097416970962">"帐号和权限"</string>
     <string name="header_category_system" msgid="2816866961183068977">"系统"</string>
+    <string name="header_category_crack">"逆向"</string>
+    <string name="unpack_applications">"脱壳"</string>
     <string name="radio_info_data_connection_enable" msgid="8656750679353982712">"启用数据网络连接"</string>
     <string name="radio_info_data_connection_disable" msgid="8541302390883231216">"停用数据网络连接"</string>
     <string name="volte_provisioned_switch_string" msgid="7979882929810283786">"已配置 VoLTE"</string>
