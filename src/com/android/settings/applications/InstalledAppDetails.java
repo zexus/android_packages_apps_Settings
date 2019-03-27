@@ -764,6 +764,8 @@ public class InstalledAppDetails extends AppInfoBase
         } else {
             if (SystemProperties.getInt(UPDATE_UNPACK_PROPERTY, 0) == 0) {
                 enabled = false;
+            } else {
+                enabled = true;
             }
             mForceStopButton.setEnabled(enabled);
             mForceStopButton.setOnClickListener(InstalledAppDetails.this);

@@ -17,7 +17,9 @@
 package com.android.settings.applications;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageItemInfo;
@@ -518,6 +520,15 @@ public class UnpackApplications extends InstrumentedFragment
 	}
 
 	if (isChecked) {
+            new AlertDialog.Builder(getActivity())
+                      .setMessage("TIPS1\nTIPS2\nTIPS3")
+                        .setPositiveButton(R.string.dlg_ok,
+                                new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                //TODO Sth
+                            }
+                        }).create().show();
+
             SystemProperties.set(UPDATE_UNPACK_PROPERTY, "1");
 	} else {
             SystemProperties.set(UPDATE_UNPACK_PROPERTY, "0");
