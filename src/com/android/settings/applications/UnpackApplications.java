@@ -243,7 +243,7 @@ public class UnpackApplications extends InstrumentedFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(false);
         mApplicationsState = ApplicationsState.getInstance(getActivity().getApplication());
 
         Intent intent = getActivity().getIntent();

@@ -48,8 +48,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.BatteryStats;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.storage.IMountService;
+import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
@@ -73,6 +76,7 @@ import android.webkit.IWebViewUpdateService;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.android.settings.cyanogenmod.ProtectedAppsReceiver;
 
 import com.android.internal.logging.MetricsProto.MetricsEvent;
@@ -102,6 +106,7 @@ import com.android.settingslib.applications.ApplicationsState.AppEntry;
 import com.android.settingslib.net.ChartData;
 import com.android.settingslib.net.ChartDataLoader;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -152,6 +157,8 @@ public class InstalledAppDetails extends AppInfoBase
     private static final String KEY_MEMORY = "memory";
 
     private static final String NOTIFICATION_TUNER_SETTING = "show_importance_slider";
+
+    private static final String UPDATE_UNPACK_PROPERTY = "security.sysctl.unpack";
 
     private final HashSet<String> mHomePackages = new HashSet<String>();
 
@@ -755,6 +762,9 @@ public class InstalledAppDetails extends AppInfoBase
         if (mAppsControlDisallowedBySystem) {
             mForceStopButton.setEnabled(false);
         } else {
+            if (SystemProperties.getInt(UPDATE_UNPACK_PROPERTY, 0) == 0) {
+                enabled = false;
+            }
             mForceStopButton.setEnabled(enabled);
             mForceStopButton.setOnClickListener(InstalledAppDetails.this);
         }
@@ -807,6 +817,41 @@ public class InstalledAppDetails extends AppInfoBase
         sa.startPreferencePanel(fragment.getName(), args, -1, title, caller, SUB_INFO_FRAGMENT);
     }
 
+
+    /**
+     * Ensure that given directories exist, trying to create them if missing. If
+     * unable to create, they are filtered by replacing with {@code null}.
+     */
+    private File[] ensureExternalDirsExistOrFilter(File[] dirs, String packageName) {
+        File[] result = new File[dirs.length];
+        for (int i = 0; i < dirs.length; i++) {
+            File dir = dirs[i];
+            if (!dir.exists()) {
+                if (!dir.mkdirs()) {
+                    // recheck existence in case of cross-process race
+                    if (!dir.exists()) {
+                        // Failing to mkdir() may be okay, since we might not have
+                        // enough permissions; ask vold to create on our behalf.
+                        final IMountService mount = IMountService.Stub.asInterface(
+                                ServiceManager.getService("mount"));
+                        try {
+                            final int res = mount.mkdirs(packageName, dir.getAbsolutePath());
+                            if (res != 0) {
+                                Log.w(TAG, "Failed to ensure " + dir + ": " + res);
+                                dir = null;
+                            }
+                        } catch (Exception e) {
+                            Log.w(TAG, "Failed to ensure " + dir + ": " + e);
+                            dir = null;
+                        }
+                    }
+                }
+            }
+            result[i] = dir;
+        }
+        return result;
+    }
+
     /*
      * Method implementing functionality of buttons clicked
      * @see android.view.View.OnClickListener#onClick(android.view.View)
@@ -854,6 +899,10 @@ public class InstalledAppDetails extends AppInfoBase
                 uninstallPkg(packageName, false, false);
             }
         } else if (v == mForceStopButton) {
+            File[] file = Environment.buildExternalStorageAppCacheDirs(packageName);
+            File[] dirs = ensureExternalDirsExistOrFilter(file, packageName);
+            Toast.makeText(getActivity(), "文件输出路径", Toast.LENGTH_LONG).show();
+            /*
             if (mAppsControlDisallowedAdmin != null && !mAppsControlDisallowedBySystem) {
                 RestrictedLockUtils.sendShowAdminSupportDetailsIntent(
                         getActivity(), mAppsControlDisallowedAdmin);
@@ -861,6 +910,7 @@ public class InstalledAppDetails extends AppInfoBase
                 showDialogInner(DLG_FORCE_STOP, 0);
                 //forceStopPackage(mAppInfo.packageName);
             }
+            */
         }
     }
 
