@@ -521,14 +521,12 @@ public class UnpackApplications extends InstrumentedFragment
 
 	if (isChecked) {
             new AlertDialog.Builder(getActivity())
-                      .setMessage("TIPS1\nTIPS2\nTIPS3")
-                        .setPositiveButton(R.string.dlg_ok,
-                                new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                //TODO Sth
-                            }
-                        }).create().show();
-
+		    .setMessage("脱壳步骤\n1.安装应用，暂不要打开应用\n2.选择列表应用，点击脱壳开始")
+		    .setPositiveButton(R.string.dlg_ok, new DialogInterface.OnClickListener() {
+			    public void onClick(DialogInterface dialog, int which) {
+				    //TODO Sth
+	                    }
+		    }).create().show();
             SystemProperties.set(UPDATE_UNPACK_PROPERTY, "1");
 	} else {
             SystemProperties.set(UPDATE_UNPACK_PROPERTY, "0");

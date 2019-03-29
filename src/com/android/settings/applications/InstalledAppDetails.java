@@ -106,6 +106,9 @@ import com.android.settingslib.applications.ApplicationsState.AppEntry;
 import com.android.settingslib.net.ChartData;
 import com.android.settingslib.net.ChartDataLoader;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -901,9 +904,44 @@ public class InstalledAppDetails extends AppInfoBase
                 uninstallPkg(packageName, false, false);
             }
         } else if (v == mForceStopButton) {
-            File[] file = Environment.buildExternalStorageAppCacheDirs(packageName);
-            File[] dirs = ensureExternalDirsExistOrFilter(file, packageName);
-            Toast.makeText(getActivity(), "文件输出路径", Toast.LENGTH_LONG).show();
+            boolean processRunning = false;
+            ActivityManager am = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+            List<ActivityManager.RunningAppProcessInfo> processes = am.getRunningAppProcesses();
+            final int NP = processes != null ? processes.size() : 0;
+            for (int i=0; i<NP; i++) {
+                ActivityManager.RunningAppProcessInfo pi = processes.get(i);
+                if (pi.processName.equals(packageName)) {
+                    processRunning = true;
+                }
+            }
+
+            if (processRunning) {
+                new AlertDialog.Builder(getActivity())
+                .setMessage("系统检测到应用正在运行，为了脱壳成功，谨记安装后请勿开启应用，现在重新安装？")
+                .setPositiveButton(R.string.dlg_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        uninstallPkg(packageName, false, false);
+                    }
+                })
+                .setNegativeButton(R.string.dlg_cancel, null)
+                .create().show();
+            } else {
+                Intent intent = getContext().getPackageManager().getLaunchIntentForPackage(packageName);
+                startActivity(intent);
+
+                File[] file = Environment.buildExternalStorageAppCacheDirs(packageName);
+                File[] dirs = ensureExternalDirsExistOrFilter(file, packageName);
+
+                try {
+                    // Process process = Runtime.getRuntime().exec(new String[]{"su", " -c ", "drizzleDumper " + packageName + " 1"});
+                    // int status = process.waitFor();
+                    SystemProperties.set("security.sysctl.package", packageName);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                Toast.makeText(getActivity(), "文件输出路径：/mnt/sdcard/Android/data/" + packageName + "/", Toast.LENGTH_LONG).show();
+            }
             /*
             if (mAppsControlDisallowedAdmin != null && !mAppsControlDisallowedBySystem) {
                 RestrictedLockUtils.sendShowAdminSupportDetailsIntent(
