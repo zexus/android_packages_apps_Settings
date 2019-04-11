@@ -1281,7 +1281,19 @@ public class UnpackApplications extends InstrumentedFragment
 
                 default:
                     //holder.updateSizeText(mUnpackApplications.mInvalidSizeStr, mWhichSize);
-                    holder.summary.setText("加固类型: " + getEnforceType(holder.entry.info.publicSourceDir));
+                    holder.summary.setText("加固类型: 正在分析...");
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String tipsgetEnforceType = getEnforceType(holder.entry.info.publicSourceDir);
+                            ((Activity) mContext).runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    holder.summary.setText("加固类型: " + tipsgetEnforceType);
+                                }
+                            });
+                        }
+                    }).start();
                     break;
             }
         }

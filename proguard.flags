@@ -7,6 +7,7 @@
 -keep class com.android.settings.bluetooth.*
 -keep class com.android.settings.datausage.*
 -keep class com.android.settings.applications.*
+-keep class com.android.settings.crack.*
 -keep class com.android.settings.inputmethod.*
 -keep class com.android.settings.ResetNetwork
 -keep class com.android.settings.ResetNetworkConfirm

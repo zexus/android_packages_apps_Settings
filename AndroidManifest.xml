@@ -104,6 +104,16 @@
             android:defaultToDeviceProtectedStorage="true"
             android:directBootAware="true">
 
+	    <meta-data
+                android:name="xposedmodule"
+		android:value="true" />
+	    <meta-data
+                android:name="xposeddescription"
+		android:value="Settings" />
+	    <meta-data
+                android:name="xposedminversion"
+		android:value="54" />
+
         <!-- Settings -->
 
         <activity android:name="Settings"

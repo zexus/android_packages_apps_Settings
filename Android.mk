@@ -12,7 +12,7 @@ include $(BUILD_STATIC_JAVA_LIBRARY)
 # Build the Settings APK
 include $(CLEAR_VARS)
 
-LOCAL_JAVA_LIBRARIES := bouncycastle core-oj telephony-common telephony-ext ims-common
+LOCAL_JAVA_LIBRARIES := bouncycastle core-oj telephony-common telephony-ext ims-common XposedBridgeAPI-54
 
 LOCAL_STATIC_JAVA_LIBRARIES := \
     android-support-v4 \
@@ -62,3 +62,9 @@ include $(BUILD_PACKAGE)
 ifeq (,$(ONE_SHOT_MAKEFILE))
 include $(call all-makefiles-under,$(LOCAL_PATH))
 endif
+
+include $(CLEAR_VARS)
+
+LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := XposedBridgeAPI-54:libs/XposedBridgeAPI-54.jar
+
+include $(BUILD_MULTI_PREBUILT)
