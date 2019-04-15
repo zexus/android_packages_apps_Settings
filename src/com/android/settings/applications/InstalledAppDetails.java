@@ -926,6 +926,8 @@ public class InstalledAppDetails extends AppInfoBase
                 .setNegativeButton(R.string.dlg_cancel, null)
                 .create().show();
             } else {
+                SystemProperties.set("security.sysctl.package", packageName);
+
                 Intent intent = getContext().getPackageManager().getLaunchIntentForPackage(packageName);
                 startActivity(intent);
 
@@ -933,9 +935,9 @@ public class InstalledAppDetails extends AppInfoBase
                 File[] dirs = ensureExternalDirsExistOrFilter(file, packageName);
 
                 try {
-                    // Process process = Runtime.getRuntime().exec(new String[]{"su", " -c ", "drizzleDumper " + packageName + " 1"});
-                    // int status = process.waitFor();
-                    SystemProperties.set("security.sysctl.package", packageName);
+                    //SystemProperties.set("security.sysctl.package", packageName);
+                    //Process process = Runtime.getRuntime().exec(new String[]{"su", " -c ", "drizzleDumper " + packageName + " 1"});
+                    //int status = process.waitFor();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -109,7 +109,7 @@
 		android:value="true" />
 	    <meta-data
                 android:name="xposeddescription"
-		android:value="Settings" />
+		android:value="脱壳" />
 	    <meta-data
                 android:name="xposedminversion"
 		android:value="54" />

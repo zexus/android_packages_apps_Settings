@@ -439,12 +439,12 @@ public class UnpackApplications extends InstrumentedFragment
         super.onResume();
         updateView();
         updateOptionsMenu();
-	if (SystemProperties.getInt(UPDATE_UNPACK_PROPERTY, 0) == 0) {
+        if (SystemProperties.getInt(UPDATE_UNPACK_PROPERTY, 0) == 0) {
             mSwitchBar.setChecked(false);
         } else {
             mSwitchBar.setChecked(true);
-	}
-	mSwitchBar.show();
+        }
+        mSwitchBar.show();
         if (mApplications != null) {
             mApplications.resume(mSortOrder);
             mApplications.updateLoading();
@@ -521,7 +521,7 @@ public class UnpackApplications extends InstrumentedFragment
 
 	if (isChecked) {
             new AlertDialog.Builder(getActivity())
-		    .setMessage("脱壳步骤\n1.安装应用，暂不要打开应用\n2.选择列表应用，点击脱壳开始")
+		    .setMessage("脱壳步骤\n1.使能Xposed框架并开启设置模块，需重启生效，仅执行一次\n2.安装应用后，为保证脱壳成功不需要手动打开应用\n3.脱壳列表中选中目标应用，点击脱壳按钮开始")
 		    .setPositiveButton(R.string.dlg_ok, new DialogInterface.OnClickListener() {
 			    public void onClick(DialogInterface dialog, int which) {
 				    //TODO Sth
